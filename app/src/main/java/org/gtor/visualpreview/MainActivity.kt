@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -223,15 +224,47 @@ class MainActivity : Activity() {
             Triple("United States", "Example region · New York", "US"),
             Triple("France", "Example region · Paris", "FR")
         )
-        regions.forEach { item ->
-            val selected = selectedRegion == item.first
-            val row = settingRow(item.third, item.first, item.second, if (selected) "✓" else "›", accentIfSelected = selected) {
-                selectedRegion = item.first
-                renderPage()
-            }
-            addView(row, matchWrap())
-            addView(space(8))
+        val regionList = LinearLayout(this@MainActivity).apply { orientation = LinearLayout.VERTICAL }
+        val search = EditText(this@MainActivity).apply {
+            hint = "Search sample regions"
+            setHintTextColor(muted)
+            setTextColor(white)
+            textSize = 14f
+            singleLine = true
+            setPadding(dp(16), dp(14), dp(16), dp(14))
+            background = shape(panel, line, 1, 16)
+            contentDescription = "Search sample regions"
         }
+        addView(search, LinearLayout.LayoutParams(-1, dp(52)))
+        addView(space(12))
+        addView(regionList, matchWrap())
+        fun showRegions(query: String) {
+            regionList.removeAllViews()
+            val matches = regions.filter {
+                it.first.contains(query.trim(), ignoreCase = true) ||
+                    it.second.contains(query.trim(), ignoreCase = true)
+            }
+            if (matches.isEmpty()) {
+                regionList.addView(infoCard("No sample regions found", "Try another region name."), matchWrap())
+            } else {
+                matches.forEach { item ->
+                    val selected = selectedRegion == item.first
+                    val row = settingRow(item.third, item.first, item.second, if (selected) "✓" else "›", accentIfSelected = selected) {
+                        selectedRegion = item.first
+                        renderPage()
+                    }
+                    regionList.addView(row, matchWrap())
+                }
+            }
+        }
+        showRegions("")
+        search.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showRegions(s?.toString().orEmpty())
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
         addView(space(8))
         addView(privacyNote(), matchWrap())
         addView(space(18))

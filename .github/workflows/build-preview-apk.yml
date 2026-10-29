@@ -45,10 +45,28 @@ jobs:
           gradle-version: "8.9"
       - name: Build debug APK
         run: gradle --no-daemon --stacktrace :app:assembleDebug
+      - name: Verify APK and generate checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          apks=(app/build/outputs/apk/debug/*.apk)
+          if [ "${#apks[@]}" -ne 1 ]; then
+            echo "Expected exactly one debug APK; found ${#apks[@]}."
+            exit 1
+          fi
+          sha256sum "${apks[0]}" > app/build/outputs/apk/debug/SHA256SUMS.txt
+          {
+            echo "APK_FILE=$(basename "${apks[0]}")"
+            echo "APK_SHA256=$(cut -d ' ' -f 1 app/build/outputs/apk/debug/SHA256SUMS.txt)"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "APK built and checksum generated."
       - name: Upload preview APK
         uses: actions/upload-artifact@v4
         with:
           name: gtor-visual-preview-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/debug/SHA256SUMS.txt
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14

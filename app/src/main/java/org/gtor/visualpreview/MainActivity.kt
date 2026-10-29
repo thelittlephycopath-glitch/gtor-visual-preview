@@ -230,7 +230,7 @@ class MainActivity : Activity() {
             setHintTextColor(muted)
             setTextColor(white)
             textSize = 14f
-            singleLine = true
+            isSingleLine = true
             setPadding(dp(16), dp(14), dp(16), dp(14))
             background = shape(panel, line, 1, 16)
             contentDescription = "Search sample regions"

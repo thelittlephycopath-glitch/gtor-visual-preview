@@ -330,7 +330,7 @@ class MainActivity : Activity() {
                 val logoWrap = LinearLayout(this@MainActivity).apply { gravity = Gravity.CENTER; addView(logo, LinearLayout.LayoutParams(dp(88), dp(88))) }
                 addView(logoWrap, matchWrap())
                 addView(space(15))
-                addView(infoCard("GTor Visual Preview", "Version 0.1-preview"))
+                addView(infoCard("GTor Visual Preview", "Version 0.2-preview"))
                 addView(space(10))
                 addView(infoCard("Build type", "Android debug · UI/UX sandbox"))
                 addView(space(10))

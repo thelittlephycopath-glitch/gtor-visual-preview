@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+      - name: Verify UI-only boundary
+        run: bash scripts/verify-preview-only.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:

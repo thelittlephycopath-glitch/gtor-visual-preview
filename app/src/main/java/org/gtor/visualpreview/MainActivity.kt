@@ -38,6 +38,22 @@ class MainActivity : Activity() {
     private val white = Color.rgb(242, 248, 249)
     private val line = Color.rgb(39, 54, 63)
 
+    @Deprecated("Deprecated in Android API; retained for broad preview-device compatibility")
+    override fun onBackPressed() {
+        if (detailPage != null) {
+            detailPage = null
+            currentTab = 2
+            renderPage()
+            return
+        }
+        if (currentTab != 0) {
+            currentTab = 0
+            renderPage()
+            return
+        }
+        super.onBackPressed()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = bg

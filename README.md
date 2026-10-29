@@ -9,14 +9,29 @@ This repository is deliberately a visual prototype. It does **not** implement or
 ## Screens
 
 - **Home:** connection-status concept, illustrative overview cards, quick settings.
-- **Regions:** locally selectable sample regions; these are not live Tor exit nodes.
+- **Regions:** locally selectable sample regions with search; these are not live Tor exit nodes.
 - **Settings:** region selection, bridges, app-routing mock, appearance, privacy notes, and About.
 - **Detail flows:** sample bridge choices, an app-routing toggle, appearance preference, and product-safety explanations.
 - **Branding:** simplified white-mask GTor logo, app-header mark, in-app brand mark, and adaptive launcher icon.
 
-## Build
+## APK Downloads
 
-The GitHub Actions workflow **Build GTor Visual Preview APK** builds a debug APK and uploads the artifact as `gtor-visual-preview-debug-apk`. Open the repository's Actions tab, choose the latest successful run, and download the artifact ZIP.
+**Latest build page:** [Open GTor Preview APK builds](https://github.com/thelittlephycopath-glitch/gtor-visual-preview/actions/workflows/build-preview-apk.yml)
+
+1. Open the build page above and select the newest successful run (green check).
+2. Scroll to **Artifacts** and download **`gtor-visual-preview-debug-apk`**.
+3. Extract the ZIP on your phone. It contains the debug APK and `SHA256SUMS.txt`.
+4. Open the APK on your Android device to install it. Android may ask you to allow installation from the app you used to open the file.
+
+### What the build system checks
+
+- Runs `scripts/verify-preview-only.sh` before compiling, to guard the UI-only scope.
+- Builds the Android debug APK with GitHub Actions.
+- Fails if the build does not produce exactly one APK.
+- Generates a SHA-256 checksum so the downloaded APK can be checked for integrity.
+- Keeps each uploaded artifact for **14 days**.
+
+This is a **debug preview APK**, not a signed production release. A successful build means the APK compiled; it does not by itself prove every screen has been tested on a physical device.
 
 ## Important
 
